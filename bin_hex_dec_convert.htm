@@ -1,0 +1,240 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<html>
+<head>
+<title>Bin to Hex to Dec Converter</title>
+<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+</head>
+
+<body>
+  <p>
+    <script language="JavaScript">
+
+// function getbits reads the "bits" and calculates their value
+function getbits() {
+
+    var value=0;
+    var bitv=1;
+    for (x=0; x < 32; x++)	{
+        // I'm using eval rather than element[x] so that the form
+        // can be messed around with.
+        if (eval("document.twiddle.bit"+x+".checked")) {
+            value += bitv;
+        }
+        bitv *= 2;
+    }
+    document.twiddle.decresults.value=value;
+    var tstring=value.toString(16);
+    tstring=tstring.toUpperCase();
+    var pos=0;
+    var c="";
+    var newtstring="";
+    // get rid of ":"'s in old Netscape
+    for (pos=0; pos < tstring.length; pos ++) {
+        c=tstring.charAt(pos);
+        if (c == ":" ) {
+            c="A";
+        }
+        newtstring=newtstring + c;
+    }
+    // now add some preceeding zeros
+    var slen=newtstring.length;
+    for (pos=8;pos > slen; pos --) {
+        newtstring = "0" + newtstring;
+    }
+
+    var tempc = "c";
+    for (pos=0;pos < 8; pos ++) {
+        tempc = newtstring.charAt(7-pos);
+        eval("document.twiddle.hex"+pos+".value=" + "\"" + tempc + "\""); 
+    }
+    document.twiddle.hexresults.value=newtstring;
+
+}
+
+// function newresult sets the bits from value entered
+function newdec() {
+
+    value=parseInt(document.twiddle.decresults.value,10);
+    if (isNaN(value)) {
+        value=0;
+    }
+
+    y=0x80000000;
+    for (x=31; x >= 0; x--) {
+        eval("document.twiddle.bit"+x+".checked=false");
+        if ((value & y ) != 0) {
+            value -= y;
+            eval("document.twiddle.bit"+x+".checked=true");
+        }
+        y = y/2;
+
+    }
+
+
+    getbits();
+}
+
+function newhex() {
+
+    var hexnum=parseInt(document.twiddle.hexresults.value,16);
+    if (isNaN(hexnum)) {        hexnum=0;    }
+    document.twiddle.decresults.value=hexnum;
+    newdec();
+}
+function newsubhex() {
+    var temphex = "";
+    var x = 0;
+    for (x=7;x >= 0; x--) {
+        eval("temphex = temphex + document.twiddle.hex" + x + ".value");
+    }
+    document.twiddle.hexresults.value = temphex;
+    var hexnum=parseInt(document.twiddle.hexresults.value,16);
+    if (isNaN(hexnum)) {        hexnum=0;    }
+    document.twiddle.decresults.value=hexnum;
+    newdec();
+}
+function clearit() {
+
+    for (x=0; x < 32; x++) {
+        eval("document.twiddle.bit"+x+".checked=false");
+    }
+    value=0;
+    document.twiddle.decresults.value=value;
+    document.twiddle.hexresults.value=0;
+
+
+}
+
+
+  </script>
+</p>
+  <p><strong><font size="5">Binary to Hex to Decimal Converter</font></strong><font size="5"> </font></p>
+  <p>Modify Any field and the others will update accordingly.<br>
+    An invalid value will set the fields to zero.</p>
+  <form name="twiddle" method="post" onsubmit="newhex(); return false;" action="">
+<table width="650" border="2" cellspacing="0" cellpadding="0">
+  <tr>
+    <td><div align="right">31</div></td>
+    <td><div align="right">30</div></td>
+    <td><div align="right">29</div></td>
+    <td><div align="right">28</div></td>
+    <td bgcolor="#000000"><font color="#000000"><strong>d</strong></font></td>
+    <td><div align="right">27</div></td>
+    <td><div align="right">26</div></td>
+    <td><div align="right">25</div></td>
+    <td><div align="right">24</div></td>
+    <td bgcolor="#000000"><font color="#000000"><strong>d</strong></font></td>
+    <td><div align="right">23</div></td>
+    <td><div align="right">22</div></td>
+    <td><div align="right">21</div></td>
+    <td><div align="right">20</div></td>
+    <td bgcolor="#000000"><font color="#000000"><strong>d</strong></font></td>
+    <td><div align="right">19</div></td>
+    <td><div align="right">18</div></td>
+    <td><div align="right">17</div></td>
+    <td><div align="right">16</div></td>
+    <td bgcolor="#000000"><font color="#000000"><strong>d</strong></font></td>
+    <td><div align="right">15</div></td>
+    <td><div align="right">14</div></td>
+    <td><div align="right">13</div></td>
+    <td><div align="right">12</div></td>
+    <td bgcolor="#000000"><font color="#000000"><strong>d</strong></font></td>
+    <td><div align="right">11</div></td>
+    <td><div align="right">10</div></td>
+    <td><div align="right">9</div></td>
+    <td><div align="right">8</div></td>
+    <td bgcolor="#000000"><font color="#000000"><strong>d</strong></font></td>
+    <td><div align="right">7</div></td>
+    <td><div align="right">6</div></td>
+    <td><div align="right">5</div></td>
+    <td><div align="right">4</div></td>
+    <td bgcolor="#000000"><font color="#000000"><strong>d</strong></font></td>
+    <td><div align="right">3</div></td>
+    <td><div align="right">2</div></td>
+    <td><div align="right">1</div></td>
+    <td><div align="right">0</div></td>
+  </tr>
+  <tr>
+    <td><input type="checkbox" name="bit31" value="bit31" onclick="getbits()"></td>
+    <td><input type="checkbox" name="bit30" value="bit30" onclick="getbits()"></td>
+    <td><input type="checkbox" name="bit29" value="bit29" onclick="getbits()"></td>
+    <td><input type="checkbox" name="bit28" value="bit28" onclick="getbits()"></td>
+    <td bgcolor="#000000"><font color="#000000"><strong>d</strong></font></td>
+    <td><input type="checkbox" name="bit27" value="bit27" onclick="getbits()"></td>
+    <td><input type="checkbox" name="bit26" value="bit26" onclick="getbits()"></td>
+    <td><input type="checkbox" name="bit25" value="bit25" onclick="getbits()"></td>
+    <td><input type="checkbox" name="bit24" value="bit24" onclick="getbits()"></td>
+    <td bgcolor="#000000"><font color="#000000"><strong>d</strong></font></td>
+    <td><input type="checkbox" name="bit23" value="bit23" onclick="getbits()"></td>
+    <td><input type="checkbox" name="bit22" value="bit22" onclick="getbits()"></td>
+    <td><input type="checkbox" name="bit21" value="bit21" onclick="getbits()"></td>
+    <td><input type="checkbox" name="bit20" value="bit20" onclick="getbits()"></td>
+    <td bgcolor="#000000"><font color="#000000"><strong>d</strong></font></td>
+    <td><input type="checkbox" name="bit19" value="bit19" onclick="getbits()"></td>
+    <td><input type="checkbox" name="bit18" value="bit18" onclick="getbits()"></td>
+    <td><input type="checkbox" name="bit17" value="bit17" onclick="getbits()"></td>
+    <td><input type="checkbox" name="bit16" value="bit16" onclick="getbits()"></td>
+    <td bgcolor="#000000"><font color="#000000"><strong>d</strong></font></td>
+    <td><input type="checkbox" name="bit15" value="bit15" onclick="getbits()"></td>
+    <td><input type="checkbox" name="bit14" value="bit14" onclick="getbits()"></td>
+    <td><input type="checkbox" name="bit13" value="bit13" onclick="getbits()"></td>
+    <td><input type="checkbox" name="bit12" value="bit12" onclick="getbits()"></td>
+    <td bgcolor="#000000"><font color="#000000"><strong>d</strong></font></td>
+    <td><input type="checkbox" name="bit11" value="bit11" onclick="getbits()"></td>
+    <td><input type="checkbox" name="bit10" value="bit10" onclick="getbits()"></td>
+    <td><input type="checkbox" name="bit9" value="bit9" onclick="getbits()"></td>
+    <td><input type="checkbox" name="bit8" value="bit8" onclick="getbits()"></td>
+    <td bgcolor="#000000"><font color="#000000"><strong>d</strong></font></td>
+    <td><input type="checkbox" name="bit7" value="bit7" onclick="getbits()"></td>
+    <td><input type="checkbox" name="bit6" value="bit6" onclick="getbits()"></td>
+    <td><input type="checkbox" name="bit5" value="bit5" onclick="getbits()"></td>
+    <td><input type="checkbox" name="bit4" value="bit4" onclick="getbits()"></td>
+    <td bgcolor="#000000"><font color="#000000"><strong>d</strong></font></td>
+    <td><input type="checkbox" name="bit3" value="bit3" onclick="getbits()"></td>
+    <td><input type="checkbox" name="bit2" value="bit2" onclick="getbits()"></td>
+    <td><input type="checkbox" name="bit1" value="bit1" onclick="getbits()"></td>
+    <td><input type="checkbox" name="bit0" value="bit0" onclick="getbits()"></td>
+  </tr>
+  <tr>
+    <td colspan="4">
+      <div align="center">
+        <input name="hex7" type="text" size="1" maxlength="1" onchange="newsubhex()" >
+      </div></td>
+    <td colspan="5"><div align="center">
+      <input name="hex6" type="text" size="1" maxlength="1" onchange="newsubhex()">
+    </div></td>
+    <td colspan="5"><div align="center">
+      <input name="hex5" type="text" size="1" maxlength="1" onchange="newsubhex()">
+    </div></td>
+    <td colspan="5"><div align="center">
+      <input name="hex4" type="text" size="1" maxlength="1" onchange="newsubhex()">
+    </div></td>
+    <td colspan="5"><div align="center">
+      <input name="hex3" type="text" size="1" maxlength="1" onchange="newsubhex()">
+    </div></td>
+    <td colspan="5"><div align="center">
+      <input name="hex2" type="text" size="1" maxlength="1" onchange="newsubhex()">
+    </div></td>
+    <td colspan="5"><div align="center">
+      <input name="hex1" type="text" size="1" maxlength="1" onchange="newsubhex()">
+    </div></td>
+    <td colspan="5"><div align="center">
+      <input name="hex0" type="text" size="1" maxlength="1"onchange="newsubhex()">
+    </div></td>
+    </tr>
+  <tr>
+    <td colspan="9">HEX Value</td>
+    <td colspan="30"><input type="text" name="hexresults" onchange="newhex()"></td>
+    </tr>
+  <tr>
+    <td colspan="9">Decimal Value</td>
+    <td colspan="30"><input type="text" name="decresults" onchange="newdec()"></td>
+    </tr>
+</table>
+<p>
+  <input type="submit" name="Submit" value="Update">
+</p>
+<p>&nbsp;</p>
+</form>
+</body>
+</html>
